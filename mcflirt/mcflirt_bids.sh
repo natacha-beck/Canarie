@@ -15,7 +15,7 @@ Usage: $0 BIDSDATASET OUTPUTDIR [almost any other options of mcflirt here]
 This program has two mandatory arguments:
   * BIDSDATASET is a directory containing a standard BIDS data structure
   * OUTPUTDIR is any output directory of your choice, and will be created
-    as needed. Under it, one subdorectories will be created:
+    as needed. Under it, one subdirectories will be created:
       mc_output/
       
     and under each, there will be a subdirectory for each BIDS subject,
@@ -55,6 +55,11 @@ mkdir -p "$deriv_out" || die "Cannot create output dir"
 
 echo "$0 $VERSION starting at" `date`
 
+
+count_attempt=0
+count_success=0
+
+
 # Scan subjects
 for subjdir in "$bidsdataset"/sub-* ; do
   test -d "$subjdir" || continue # ignore any non-dir that happens ot start with sub-
@@ -63,7 +68,7 @@ for subjdir in "$bidsdataset"/sub-* ; do
   # Extract list of sessions, or just '.' if there are none
   sesslist=$(ls -1f $subjdir | grep '^ses-' | sort)
   test -z "$sesslist" && sesslist="none"
-
+  count_attempt=$(( $count_attempt + 1 ))
   # Loop through sessions; if there are no sessions, we have a fake
   # one called 'none'.
   for session in $sesslist ; do
@@ -85,8 +90,8 @@ for subjdir in "$bidsdataset"/sub-* ; do
     # Find the list of asl files
     # files we also need.
     fmrifiles=${subdata}/func/${sub_sess}*bold.nii*
-    aslfiles=${subdata}/perf/${sub_sess}*asl.nii*
-
+    
+    count_attempt=$(( $count_attempt + 1 ))
     for fmrifile in $fmrifiles ; do
 
       if ! test -f "$fmrifile" ; then
@@ -124,8 +129,19 @@ for subjdir in "$bidsdataset"/sub-* ; do
 
       if test $oasl_status -ne 0 ; then
         echo " -> ERROR: mcflirt failed, see logs in $oasl_log"
+      else
+        count_success=$(( $count_success + 1 ))
         continue
       fi
+
+     if [[ $count_attempt == "0" ]];then
+       exit 2
+     elif [[ $count_attempt !== $count_success ]];then
+       exit 1
+     elif [$count_attempt -eq $count_success] && [$count_attempt -gt 0];then
+       exit 0
+     fi
+     
 
     done # BOLD image file loop
 
