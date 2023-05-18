@@ -136,7 +136,7 @@ for subjdir in "$bidsdataset"/sub-* ; do
 
      if [[ $count_attempt == "0" ]];then
        exit 2
-     elif [[ $count_attempt !== $count_success ]];then
+     elif [[ $count_attempt != $count_success ]];then
        exit 1
      elif [$count_attempt -eq $count_success] && [$count_attempt -gt 0];then
        exit 0
