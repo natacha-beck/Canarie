@@ -119,8 +119,8 @@ for subjdir in "$bidsdataset"/sub-* ; do
         echo " -> (if this output is corrupt, consider deleting it)"
         oasl_status=0
       else
-        $MCFLIRT_EXE              \
-          -i "$fmrifile"              \
+        $MCFLIRT_EXE                 \
+          -in "$fmrifile"            \
           -o "$oasl_out"             \
           "$@"                       \
           2>&1 | tee "$oasl_log"
