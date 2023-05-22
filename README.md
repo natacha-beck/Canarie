@@ -1,3 +1,3 @@
-# Canarie
+# MCFLIRT wrapper
 
-Workspace for Canarie project about tool integration in CBRAIN. 
+A wrapper in order to run [MCFLIRT]([url](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/MCFLIRT)) on BIDS dataset.  
