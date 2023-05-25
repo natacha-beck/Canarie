@@ -142,9 +142,9 @@ done # subjects loop
 
 echo "$0 ending at" `date`
 
-if [[ $count_attempt == "0" ]];then
+if [[ $count_attempt -eq 0 ]];then
   exit 2
-elif [[ $count_attempt != $count_success ]];then
+elif [[ $count_attempt -ne $count_success ]];then
   exit 1
 elif [[ $count_attempt -eq $count_success ]] && [[ $count_attempt -gt 0 ]];then
   exit 0
